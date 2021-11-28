@@ -92,7 +92,7 @@ GET http://127.0.0.1:8000/api/v1/posts/
 GET http://127.0.0.1:8000/api/v1/posts/?limit=1&offset=1
 ```
 
-Изменение поста:
+Внесение изменений в пост:
 ```
 PUT http://127.0.0.1:8000/api/v1/posts/2/
 Content-Type: application/json
