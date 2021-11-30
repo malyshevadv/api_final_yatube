@@ -54,18 +54,12 @@ class FollowViewSet(CreateRetrieveViewSet):
     serializer_class = FollowerSerializer
     permission_classes = (permissions.IsAuthenticated,)
     filter_backends = (filters.SearchFilter, )
-    search_fields = ('^following__username',)
+    search_fields = ('^following__username', '^user__username')
 
     def get_queryset(self):
         return self.request.user.follower.all()
 
     def perform_create(self, serializer):
-        user = self.request.user
-        if user.username == self.request.data["following"]:
-            raise ValidationError(
-                'Вы не можете подписаться сами на себя.',
-                status.HTTP_400_BAD_REQUEST
-            )
         try:
             serializer.save(user=self.request.user)
         except IntegrityError:

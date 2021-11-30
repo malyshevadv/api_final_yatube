@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework import serializers
+from rest_framework import serializers, status
 
 from posts.models import Comment, Follow, Group, Post
 
@@ -47,6 +47,15 @@ class FollowerSerializer(serializers.ModelSerializer):
         read_only=True,
         slug_field='username'
     )
+
+    def validate_following(self, value):
+        request = self.context['request']
+        if request.user == value:
+            raise serializers.ValidationError(
+                'Вы не можете подписаться сами на себя.',
+                status.HTTP_400_BAD_REQUEST
+            )
+        return value
 
     class Meta:
         model = Follow
