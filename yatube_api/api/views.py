@@ -1,7 +1,5 @@
-from django.core.exceptions import ValidationError
-from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
-from rest_framework import filters, permissions, status, viewsets
+from rest_framework import filters, permissions, viewsets
 from rest_framework.pagination import LimitOffsetPagination
 
 from posts.models import Group, Post
@@ -33,13 +31,13 @@ class CommentViewSet(viewsets.ModelViewSet):
     )
 
     def get_queryset(self):
-        post_id = self.kwargs.get("post_id")
+        post_id = self.kwargs.get('post_id')
         post = get_object_or_404(Post, pk=post_id)
         comments_list = post.comments.all()
         return comments_list
 
     def perform_create(self, serializer):
-        post_id = self.kwargs.get("post_id")
+        post_id = self.kwargs.get('post_id')
         post = get_object_or_404(Post, pk=post_id)
         serializer.save(post=post, author=self.request.user)
 
@@ -60,10 +58,4 @@ class FollowViewSet(CreateRetrieveViewSet):
         return self.request.user.follower.all()
 
     def perform_create(self, serializer):
-        try:
-            serializer.save(user=self.request.user)
-        except IntegrityError:
-            raise ValidationError(
-                'Вы уже подписаны на этого автора.',
-                status.HTTP_400_BAD_REQUEST
-            )
+        serializer.save(user=self.request.user)

@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework import serializers, status
+from rest_framework import validators, serializers, status
 
 from posts.models import Comment, Follow, Group, Post
 
@@ -45,7 +45,8 @@ class FollowerSerializer(serializers.ModelSerializer):
     )
     user = serializers.SlugRelatedField(
         read_only=True,
-        slug_field='username'
+        slug_field='username',
+        default=serializers.CurrentUserDefault(),
     )
 
     def validate_following(self, value):
@@ -60,3 +61,10 @@ class FollowerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Follow
         fields = '__all__'
+        validators = [
+            validators.UniqueTogetherValidator(
+                queryset=Follow.objects.all(),
+                fields=['user', 'following'],
+                message='Вы уже подписаны на этого автора.'
+            )
+        ]

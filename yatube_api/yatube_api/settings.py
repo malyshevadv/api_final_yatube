@@ -95,7 +95,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'EXCEPTION_HANDLER': 'api.exception_handler.ValidationError400'
 }
 
 SIMPLE_JWT = {
