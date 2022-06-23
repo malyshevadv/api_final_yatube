@@ -206,8 +206,8 @@ Content-Type: application/json
 Authorization: Bearer <token>
 ```
 ### Технологии
-Python 3.7
-Django 2.2.19
+- Python 3.7
+- Django 2.2.19
 
 ### Авторы
 Дарья М.
